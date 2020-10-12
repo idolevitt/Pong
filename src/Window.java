@@ -4,16 +4,13 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.chart.PieChart;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.sql.ClientInfoStatus;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
@@ -65,6 +62,7 @@ public class Window extends Application{
         //Establishing sockets:
 
         server = new ServerSocket(9000);
+        /*
         System.out.println("waiting for clients...");
         socketPlayerOne = server.accept();
         System.out.println("Player 1 connected");
@@ -72,19 +70,25 @@ public class Window extends Application{
         Thread playerOne = new Thread(() -> {
             while (true) {
                 try {
-                    String key = disOne.readUTF();
+                    String key = disOne.readUTF() + "P1";
                     System.out.print("adding " + key + " to the input list");
-                    if (key.charAt(0) == 'R')
+                    if (key.charAt(0) == 'R') {
+                        System.out.println("Removing " + key + " from the list");
                         input.remove(key.substring(1));
-                    else
+                    }
+                    else {
+                        System.out.println("Adding " + key + " to the list");
                         input.add(key);
+                    }
                 } catch (IOException i) {
                     i.printStackTrace();
                 }
             }
         });
         playerOne.start();
-/*
+
+         */
+
         System.out.println("waiting for player 2:");
         socketPlayerTwo = server.accept();
         System.out.println("Player 2 connected");
@@ -93,9 +97,15 @@ public class Window extends Application{
 
             while (true) {
                 try {
-                    String key = disTwo.readUTF();
-                    System.out.print("adding " + key + " to the input list");
-                    input.add(key);
+                    String key = disTwo.readUTF() + "P2";
+                    if (key.charAt(0) == 'R') {
+                        System.out.println("Removing " + key + " from the list");
+                        input.remove(key.substring(1));
+                    }
+                    else {
+                        System.out.println("Adding " + key + " to the list");
+                        input.add(key);
+                    }
                 } catch (IOException i) {
                     i.printStackTrace();
                 }
@@ -104,7 +114,7 @@ public class Window extends Application{
         playerTwo.start();
 
 
- */
+
         TimeUnit.SECONDS.sleep(5);
 
         //Window:
@@ -140,13 +150,13 @@ public class Window extends Application{
         {
             public void handle(long currentNanoTime) {
 
-                if (input.contains("UP") && playerTwoYPos > 0)
+                if (input.contains("UPP1") && playerTwoYPos > 0)
                     playerTwoYPos -= 5;
-                if (input.contains("DOWN") && playerTwoYPos < windowHeight - playerHeight)
+                if (input.contains("DOWNP1") && playerTwoYPos < windowHeight - playerHeight)
                     playerTwoYPos += 5;
-                if (input.contains("W") && playerOneYPos > 0)
+                if (input.contains("UPP2") && playerOneYPos > 0)
                     playerOneYPos -= 5;
-                if (input.contains("S") && playerOneYPos < windowHeight - playerHeight)
+                if (input.contains("DOWNP2") && playerOneYPos < windowHeight - playerHeight)
                     playerOneYPos += 5;
 
                 moveBall();
