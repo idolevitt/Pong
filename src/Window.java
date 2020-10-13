@@ -184,7 +184,6 @@ public class Window extends Application{
         });
 
         //Handling the user input
-        //input = new ArrayList<>();
 
         scene.setOnKeyPressed(e -> {
             String code = e.getCode().toString();
@@ -196,8 +195,6 @@ public class Window extends Application{
             String code = e.getCode().toString();
             input.remove(code);
         });
-
-
 
         new AnimationTimer()
         {
